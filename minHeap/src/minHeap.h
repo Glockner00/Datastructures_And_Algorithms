@@ -1,4 +1,4 @@
-//minHeap.h
+// minHeap.h
 #ifndef MIN_HEAP_H
 #define MIN_HEAP_H
 
@@ -12,9 +12,7 @@ typedef struct {
   int maxSize;
 } MinHeap;
 
-//function declaration
+// function declaration
 MinHeap *createMinHeap(int maxSize);
-
-
 
 #endif
