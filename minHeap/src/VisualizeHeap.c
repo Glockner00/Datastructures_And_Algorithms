@@ -27,7 +27,6 @@ void printArray(MinHeap *heap) {
     printw(" ");
   }
   printw("\n");
- 
 }
 
 /*  Expected output:
@@ -103,7 +102,8 @@ void printHeap(MinHeap *heap) {
   printw("i : insert value\n");
   printw("m : delete minimum\n");
   printw("d : delete element\n");
-  printw("t : test input\n");
+  printw("t : test1 insert\n");
+  printw("y : test2 insert\n");
   printw("c : clear heap\n");
   printw("q : quit\n");
   printw("-----------------\n");
@@ -139,6 +139,9 @@ int main() {
       break;
     case 't':
       testInsert(heap);
+      break;
+    case 'y':
+      testInput(heap);
       break;
     case 'c':
       destroyMinHeap(heap);

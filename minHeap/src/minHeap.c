@@ -60,12 +60,11 @@ MinHeap *insertMinHeap(MinHeap *heap, HeapNode node) {
  * case we will start to swap elements upwords in the tree. We are doing
  * this recursivly until we reach the root node.
  *
- * Time Complexity of a heapify operation: O(log(n))
+ * Time Complexity of a minHeapify operation: O(log(n))
  *
- * This shit i dont now if worky
  */
 
-MinHeap *heapify(MinHeap *heap, int currIndex) {
+MinHeap *minHeapify(MinHeap *heap, int currIndex) {
   // No swaps needed
   if (heap->size <= 1) {
     return heap;
@@ -90,32 +89,30 @@ MinHeap *heapify(MinHeap *heap, int currIndex) {
   }
   // if the minelements index differs from the currentIndex we start swapping.
   if (minElementIndex != currIndex) {
-    HeapNode tempNode = heap->array[minElementIndex];
+    HeapNode tempNode = heap->array[currIndex];
     heap->array[currIndex] = heap->array[minElementIndex];
     heap->array[minElementIndex] = tempNode;
-    //heap = heapify(heap, minElementIndex);
+    heap = minHeapify(heap, minElementIndex);
   }
-
   return heap;
 }
 
 /**
- * Deletes the minium element of the heap, aka the root.
+ * Sets the last element on top and removes decreesas the size by one.
+ * Maintain the min heap property with a minHeapify operation.
  *
- *
- * This nono worky
+ * Time complexity of delete_minium is the same a minHeapify operartion:
+ * O(log(n))
  */
 
 MinHeap *delete_minimum(MinHeap *heap) {
   if (!heap || heap->size == 0) {
     return heap;
   }
-  int size = heap->size;
-  HeapNode lastNode = heap->array[size - 1];
+  HeapNode lastNode = heap->array[heap->size - 1];
   heap->array[0] = lastNode;
   heap->size--;
-  size--;
-  heap = heapify(heap,0);
+  heap = minHeapify(heap, 0);
   return heap;
 }
 
