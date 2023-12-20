@@ -41,21 +41,17 @@ MinHeap *insertMinHeap(MinHeap *heap, HeapNode node) {
     return heap;
   }
 
-  int currIndex = heap->size;
-  heap->array[currIndex] = node;
+  heap->array[heap->size] = node; // set the node at the end of the array.
+  int currentIndex = heap->size;  // current index is the last in the array.
   heap->size++;
-  int parentIndex = getParentIndex(currIndex);
 
-  // Maintain the minHeap property with a bubble up operation that is using
-  // swaps.
-  while (currIndex >= 0 &&
-         heap->array[parentIndex].value > heap->array[currIndex].value) {
-    int temp = heap->array[parentIndex].value;
-    heap->array[parentIndex] = heap->array[currIndex];
-    heap->array[currIndex].value = temp;
-    currIndex = parentIndex;
+  while (currentIndex > 0 && heap->array[getParentIndex(currentIndex)].value >
+                                 heap->array[currentIndex].value) {
+    HeapNode tempNode = {heap->array[getParentIndex(currentIndex)].value};
+    heap->array[getParentIndex(currentIndex)] = heap->array[currentIndex];
+    heap->array[currentIndex] = tempNode;
+    currentIndex = getParentIndex(currentIndex);
   }
-
   return heap;
 }
 
@@ -112,25 +108,21 @@ MinHeap *heapify(MinHeap *heap, int currIndex) {
  * This nono worky
  */
 
-MinHeap *delete_minimum(MinHeap *heap){
-    // no element to delete
-    if(heap->size==0){
-        return heap;
-    }
-
-    int size = heap->size;
-    int lastElement = heap->array[size-1].value;
-    heap->array[0].value = lastElement;
-    heap->size--;
-    size--;
-    return heapify(heap, 0);
-}
-
-MinHeap *delete_element(MinHeap *heap, int currIndex){
+MinHeap *delete_minimum(MinHeap *heap) {
+  // no element to delete
+  if (heap->size == 0) {
     return heap;
+  }
+
+  int size = heap->size;
+  int lastElement = heap->array[size - 1].value;
+  heap->array[0].value = lastElement;
+  heap->size--;
+  size--;
+  return heapify(heap, 0);
 }
 
-
+MinHeap *delete_element(MinHeap *heap, int currIndex) { return heap; }
 
 MinHeap *destroyMinHeap(MinHeap *heap) {
   free(heap->array);
