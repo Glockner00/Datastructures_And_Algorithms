@@ -87,7 +87,7 @@ MinHeap *minHeapify(MinHeap *heap, int currIndex) {
       heap->array[right].value < heap->array[minElementIndex].value) {
     minElementIndex = right;
   }
-  // if the minelements index differs from the currentIndex we start swapping.
+  // if the minelement's index differs from the currentIndex we start swapping.
   if (minElementIndex != currIndex) {
     HeapNode tempNode = heap->array[currIndex];
     heap->array[currIndex] = heap->array[minElementIndex];
@@ -98,7 +98,7 @@ MinHeap *minHeapify(MinHeap *heap, int currIndex) {
 }
 
 /**
- * Sets the last element on top and removes decreesas the size by one.
+ * Sets the last element on top and decreesas the size by one.
  * Maintain the min heap property with a minHeapify operation.
  *
  * Time complexity of delete_minium is the same a minHeapify operartion:
@@ -106,7 +106,7 @@ MinHeap *minHeapify(MinHeap *heap, int currIndex) {
  */
 
 MinHeap *delete_minimum(MinHeap *heap) {
-  if (!heap || heap->size == 0) {
+  if (heap->size == 0) {
     return heap;
   }
   HeapNode lastNode = heap->array[heap->size - 1];
@@ -115,6 +115,11 @@ MinHeap *delete_minimum(MinHeap *heap) {
   heap = minHeapify(heap, 0);
   return heap;
 }
+
+/**
+ * TODO: delete any element in the heap
+ *
+ */
 
 MinHeap *delete_element(MinHeap *heap, int currIndex) { return heap; }
 
@@ -130,4 +135,8 @@ int getLeftChildIndex(int i) { return (2 * i + 1); }
 
 int getRightChildIndex(int i) { return (i * 2 + 2); }
 
-int getMinValue(MinHeap *heap) { return heap->array[0].value; }
+/**
+ * We know that the smallest value allways will be at the root.
+ * Time complexity: O(1)
+ */
+HeapNode getMinNode(MinHeap *heap) { return heap->array[0]; }

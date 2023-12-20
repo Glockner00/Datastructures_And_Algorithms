@@ -22,5 +22,5 @@ MinHeap *delete_element(MinHeap *heap, int currIndex);
 int getParentIndex(int i);
 int getLeftChildIndex(int i);
 int getRightChildIndex(int i);
-int getMinValue(MinHeap *heap);
+HeapNode getMinNode(MinHeap *heap);
 #endif
