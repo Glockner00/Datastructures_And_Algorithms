@@ -57,13 +57,56 @@ MinHeap *insertMinHeap(MinHeap *heap, HeapNode node) {
   return heap;
 }
 
+/**
+ * Heapify - rearrange the heap so it maintains it minHeap property.
+ *
+ * Checking if a nodes children are smaller than it self. If so is the
+ * case we will start to swap elements upwords in the tree. We are doing
+ * this recursivly until we reach the root node.
+ *
+ * Time Complexity of a heapify operation: O(log(n))
+ *
+ */
+
+MinHeap *heapify(MinHeap *heap, int currIndex) {
+  // No swaps needed
+  if (heap->size <= 1) {
+    return heap;
+  }
+
+  int left = getLetfChildIndex(currIndex);
+  int right = getRightChildIndex(currIndex);
+  int minElementIndex = currIndex; // starting by setting the current index as
+                                   // the smallest element.
+
+  // if the left child is smaller than this the currentIndex, it is the
+  // smallest.
+  if (left < heap->size &&
+      heap->array[left].value < heap->array[currIndex].value) {
+    minElementIndex = left;
+  }
+  // if the right child is smaller than this, we now know that we are at the
+  // smallest element of the subtree.
+  if (right < heap->size &&
+      heap->array[right].value < heap->array[minElementIndex].value) {
+    minElementIndex = right;
+  }
+  // if the minelements index differs from the currentIndex we start swapping.
+  if (minElementIndex != currIndex) {
+    int temp = heap->array[minElementIndex].value;
+    heap->array[currIndex] = heap->array[minElementIndex];
+    heap->array[minElementIndex].value = temp;
+    heap = heapify(heap, minElementIndex);
+  }
+
+  return heap;
+}
+
 MinHeap *destroyMinHeap(MinHeap *heap) {
   free(heap->array);
   free(heap);
   return heap;
 }
-
-MinHeap *heapify(MinHeap *heap, int currIndex) { return heap; }
 
 int getParentIndex(int i) { return (i - 1) / 2; }
 
