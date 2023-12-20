@@ -14,5 +14,11 @@ typedef struct {
 
 // function declaration
 MinHeap *createMinHeap(int maxSize);
-
+MinHeap *insertMinHeap(MinHeap *heap, HeapNode newNode);
+MinHeap *destroyMinHeap(MinHeap *heap);
+MinHeap *heapify(MinHeap *heap, int index);
+int parentIndex(int i);
+int letfChildIndex(int i);
+int rightChildIndex(int i);
+int getMinValue(MinHeap *heap);
 #endif
