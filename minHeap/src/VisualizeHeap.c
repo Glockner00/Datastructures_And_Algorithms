@@ -5,13 +5,13 @@
 void printHeapTree(MinHeap *heap, int index, int space) {
   if (index < heap->size) {
     // Increase distance between levels
-    space += 5;
+    space += 3;
 
     // Process right child first
     printHeapTree(heap, getRightChildIndex(index), space);
 
     // Print current node
-    for (int i = 5; i < space; i++)
+    for (int i = 3; i < space; i++)
       printw(" ");
     printw("%d\n", heap->array[index].value);
 
