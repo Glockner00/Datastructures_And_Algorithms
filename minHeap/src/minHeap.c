@@ -70,11 +70,7 @@ MinHeap *insertMinHeap(MinHeap *heap, HeapNode node) {
 
 MinHeap *heapify(MinHeap *heap, int currIndex) {
   // No swaps needed
-  if (heap->size <= 1) {
-    return heap;
-  }
-
-  int left = getLetfChildIndex(currIndex);
+tChildIndex(currIndex);
   int right = getRightChildIndex(currIndex);
   int minElementIndex = currIndex; // starting by setting the current index as
                                    // the smallest element.
@@ -101,6 +97,30 @@ MinHeap *heapify(MinHeap *heap, int currIndex) {
 
   return heap;
 }
+
+/**
+ * Deletes the minium element of the heap, aka the root.
+ *
+ */
+
+MinHeap *delete_minimum(MinHeap *heap){
+    // no element to delete
+    if(heap->size==0){
+        return heap;
+    }
+
+    int size = heap->size;
+    int lastElement = heap->array[size-1].value;
+    heap->array[0].value = lastElement;
+    heap->size--;
+    return heapify(heap, 0);
+}
+
+MinHeap *delete_element(MinHeap *heap, int currIndex){
+    return heap;
+}
+
+
 
 MinHeap *destroyMinHeap(MinHeap *heap) {
   free(heap->array);
