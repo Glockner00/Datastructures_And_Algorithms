@@ -1,17 +1,19 @@
 // minHeap.c
 #include "minHeap.h"
+#include <stdio.h>
 #include <stdlib.h>
+#include <strings.h>
 
 MinHeap *createMinHeap(int maxSize) {
   MinHeap *heap = (MinHeap *)malloc(sizeof(MinHeap));
   if (!heap) {
-    // handle memory allocation faliure
+    fprintf(stderr, "Failed to allocate memory for the heap.");
     exit(EXIT_FAILURE);
   }
 
   heap->array = (HeapNode *)malloc(maxSize * sizeof(HeapNode));
   if (!heap->array) {
-    // handle memory allocation faliure
+    fprintf(stderr, "Failed to allocate memory for the heap.");
     free(heap);
     exit(EXIT_FAILURE);
   }
@@ -20,27 +22,37 @@ MinHeap *createMinHeap(int maxSize) {
   return heap;
 }
 
+/**
+ * Insertion into the minHeap.
+ *
+ * We are first adding the element to the bottom of the heap, we
+ * later on keep performing swaps with it's parents. We keep doing this
+ * until we reach a parent that is lesser than the inserted node or
+ * until we reach the root node.
+ *
+ * Time complexity of an insertion operation: O(log(n))
+ *
+ */
 MinHeap *insertMinHeap(MinHeap *heap, HeapNode node) {
+  // heap is full
   if (heap->size == heap->maxSize) {
-    // handle a full heap
-    return NULL;
+    fprintf(stderr, "Cannot insert %d, heap is full.\n", node.value);
+    return heap;
   }
-  // Add a new node to the top of the heap and increase the size of the heap.
-  int index = heap->size; // current index
-  heap->array[index] = node;
+
+  int currIndex = heap->size;
+  heap->array[currIndex] = node;
   heap->size++;
-  // Maintain the minHeap property with a bubble up operation.
-  while (index > 0) {
-    int parentIndex = (index - 1) / 2;
-    if (heap->array[index].value < heap->array[parentIndex].value) {
-      // Swap if parent has a greater value
-      HeapNode temp = heap->array[index];
-      heap->array[index] = heap->array[parentIndex];
-      heap->array[parentIndex] = temp;
-      index = parentIndex; // move up to the parent index.
-    } else {
-      break;
-    }
+  int parentIndex = getParentIndex(currIndex);
+
+  // Maintain the minHeap property with a bubble up operation that is using
+  // swaps.
+  while (currIndex > 0 &&
+         heap->array[parentIndex].value > heap->array[currIndex].value) {
+    int temp = heap->array[parentIndex].value;
+    heap->array[parentIndex] = heap->array[currIndex];
+    heap->array[currIndex].value = temp;
+    currIndex = parentIndex;
   }
   return heap;
 }
@@ -51,25 +63,12 @@ MinHeap *destroyMinHeap(MinHeap *heap) {
   return heap;
 }
 
-MinHeap *heapify(MinHeap *heap, int index){
-    return heap;
-}
+MinHeap *heapify(MinHeap *heap, int currIndex) { return heap; }
 
+int getParentIndex(int i) { return (i - 1) / 2; }
 
-int parentIndex(int i){
-    return(i-1)/2;
-}
+int getLeftChildIndex(int i) { return (2 * i + 1); }
 
-int leftChildIndex(int i){
-    return (2*i+1);
-}
+int getRightChildIndex(int i) { return (i * 2 + 2); }
 
-int rightChildIndex(int i){
-    return(i*2+2);
-}
-int getMinValue(MinHeap *heap){
-    return heap->array[0].value;
-}
-
-
-
+int getMinValue(MinHeap *heap) { return heap->array[0].value; }

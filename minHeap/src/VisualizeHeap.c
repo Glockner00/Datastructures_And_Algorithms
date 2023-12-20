@@ -20,7 +20,7 @@ int main() {
   noecho();             // Don't echo keypresses
   cbreak();             // Disable line buffering
   keypad(stdscr, TRUE); // Enable special key handling
-  MinHeap *heap = createMinHeap(15);
+  MinHeap *heap = createMinHeap(10);
   int ch;
   do {
     printHeap(heap);
@@ -36,8 +36,8 @@ int main() {
       refresh();
       int value;
       scanw("%d", &value);
-      //HeapNode newNode = {value};
-      //insertMinHeap(heap, newNode);
+      HeapNode newNode = {value};
+      insertMinHeap(heap, newNode);
       break;
     case 'e':
       break;
