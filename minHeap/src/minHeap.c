@@ -32,10 +32,8 @@ MinHeap *createMinHeap(int maxSize) {
  *
  * Time complexity of an insertion operation: O(log(n))
  *
- * THis kinda worky
  */
 MinHeap *insertMinHeap(MinHeap *heap, HeapNode node) {
-  // heap is full
   if (heap->size == heap->maxSize) {
     fprintf(stderr, "Cannot insert %d, heap is full.\n", node.value);
     return heap;
@@ -92,10 +90,10 @@ MinHeap *heapify(MinHeap *heap, int currIndex) {
   }
   // if the minelements index differs from the currentIndex we start swapping.
   if (minElementIndex != currIndex) {
-    int temp = heap->array[minElementIndex].value;
+    HeapNode tempNode = heap->array[minElementIndex];
     heap->array[currIndex] = heap->array[minElementIndex];
-    heap->array[minElementIndex].value = temp;
-    heap = heapify(heap, minElementIndex);
+    heap->array[minElementIndex] = tempNode;
+    //heap = heapify(heap, minElementIndex);
   }
 
   return heap;
@@ -109,17 +107,16 @@ MinHeap *heapify(MinHeap *heap, int currIndex) {
  */
 
 MinHeap *delete_minimum(MinHeap *heap) {
-  // no element to delete
-  if (heap->size == 0) {
+  if (!heap || heap->size == 0) {
     return heap;
   }
-
   int size = heap->size;
-  int lastElement = heap->array[size - 1].value;
-  heap->array[0].value = lastElement;
+  HeapNode lastNode = heap->array[size - 1];
+  heap->array[0] = lastNode;
   heap->size--;
   size--;
-  return heapify(heap, 0);
+  heap = heapify(heap,0);
+  return heap;
 }
 
 MinHeap *delete_element(MinHeap *heap, int currIndex) { return heap; }
