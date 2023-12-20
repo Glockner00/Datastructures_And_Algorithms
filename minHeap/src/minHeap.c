@@ -32,6 +32,7 @@ MinHeap *createMinHeap(int maxSize) {
  *
  * Time complexity of an insertion operation: O(log(n))
  *
+ * THis shit worky
  */
 MinHeap *insertMinHeap(MinHeap *heap, HeapNode node) {
   // heap is full
@@ -66,11 +67,16 @@ MinHeap *insertMinHeap(MinHeap *heap, HeapNode node) {
  *
  * Time Complexity of a heapify operation: O(log(n))
  *
+ * This shit i dont now if worky
  */
 
 MinHeap *heapify(MinHeap *heap, int currIndex) {
   // No swaps needed
-tChildIndex(currIndex);
+  if (heap->size <= 1) {
+    return heap;
+  }
+
+  int left = getLeftChildIndex(currIndex);
   int right = getRightChildIndex(currIndex);
   int minElementIndex = currIndex; // starting by setting the current index as
                                    // the smallest element.
@@ -101,6 +107,8 @@ tChildIndex(currIndex);
 /**
  * Deletes the minium element of the heap, aka the root.
  *
+ *
+ * This nono worky
  */
 
 MinHeap *delete_minimum(MinHeap *heap){
@@ -113,6 +121,7 @@ MinHeap *delete_minimum(MinHeap *heap){
     int lastElement = heap->array[size-1].value;
     heap->array[0].value = lastElement;
     heap->size--;
+    size--;
     return heapify(heap, 0);
 }
 
