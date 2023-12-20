@@ -20,6 +20,16 @@ void printHeapTree(MinHeap *heap, int index, int space) {
   }
 }
 
+void printArray(MinHeap *heap) {
+  printw("\nOrder in array: \n");
+  for (int i = 0; i < heap->size; ++i) {
+    printw("%d", heap->array[i].value);
+    printw(" ");
+  }
+  printw("\n");
+ 
+}
+
 /*  Expected output:
                  1
                /    \
@@ -65,10 +75,30 @@ void testInput(MinHeap *heap) {
   insertMinHeap(heap, newNode10);
 }
 
+void testInsert(MinHeap *heap) {
+  HeapNode newNode0 = {2};
+  insertMinHeap(heap, newNode0);
+
+  HeapNode newNode1 = {3};
+  insertMinHeap(heap, newNode1);
+
+  HeapNode newNode2 = {10};
+  insertMinHeap(heap, newNode2);
+
+  HeapNode newNode3 = {4};
+  insertMinHeap(heap, newNode3);
+
+  HeapNode newNode4 = {5};
+  insertMinHeap(heap, newNode4);
+}
+
 void printHeap(MinHeap *heap) {
   clear();
   refresh();
   printHeapTree(heap, 0, 0);
+  printArray(heap);
+  refresh();
+
   printw("-----------------\n");
   printw("i : insert value\n");
   printw("m : delete minimum\n");
@@ -108,7 +138,7 @@ int main() {
       printw("\nEnter the value to remove: ");
       break;
     case 't':
-      testInput(heap);
+      testInsert(heap);
       break;
     case 'c':
       destroyMinHeap(heap);

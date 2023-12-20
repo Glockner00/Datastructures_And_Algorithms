@@ -32,7 +32,7 @@ MinHeap *createMinHeap(int maxSize) {
  *
  * Time complexity of an insertion operation: O(log(n))
  *
- * THis shit worky
+ * THis kinda worky
  */
 MinHeap *insertMinHeap(MinHeap *heap, HeapNode node) {
   // heap is full
@@ -48,13 +48,14 @@ MinHeap *insertMinHeap(MinHeap *heap, HeapNode node) {
 
   // Maintain the minHeap property with a bubble up operation that is using
   // swaps.
-  while (currIndex > 0 &&
+  while (currIndex >= 0 &&
          heap->array[parentIndex].value > heap->array[currIndex].value) {
     int temp = heap->array[parentIndex].value;
     heap->array[parentIndex] = heap->array[currIndex];
     heap->array[currIndex].value = temp;
     currIndex = parentIndex;
   }
+
   return heap;
 }
 
