@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <strings.h>
 
+// TODO: Dynamicly set the heap size.
+
 MinHeap *createMinHeap(int maxSize) {
   MinHeap *heap = (MinHeap *)malloc(sizeof(MinHeap));
   if (!heap) {
@@ -101,11 +103,11 @@ MinHeap *minHeapify(MinHeap *heap, int currIndex) {
  * Sets the last element on top and decreesas the size by one.
  * Maintain the min heap property with a minHeapify operation.
  *
- * Time complexity of delete_minium is the same a minHeapify operartion:
+ * Time complexity of deleteMin is the same a minHeapify operartion:
  * O(log(n))
  */
 
-MinHeap *delete_minimum(MinHeap *heap) {
+MinHeap *deleteMin(MinHeap *heap) {
   if (heap->size == 0) {
     return heap;
   }
@@ -121,7 +123,50 @@ MinHeap *delete_minimum(MinHeap *heap) {
  *
  */
 
-MinHeap *delete_element(MinHeap *heap, int currIndex) { return heap; }
+MinHeap *deleteNode(MinHeap *heap, int targetValue) {
+  if (heap->size == 0) {
+    // Heap is empty, nothing to delete
+    return heap;
+  }
+
+  // Find the index of the target value using a helper function
+  // Worst case O(n), average case is much better but not constant.
+  int targetIndex = findValueIndex(heap, targetValue, 0);
+
+  if (targetIndex != -1) {
+    // Value found, perform deletion
+    heap->array[targetIndex] = heap->array[heap->size - 1];
+    heap->size--;
+    heap = minHeapify(heap, targetIndex);
+  }
+  return heap;
+}
+
+int findValueIndex(MinHeap *heap, int targetValue, int currIndex) {
+  if (currIndex >= heap->size) {
+    // Value not found, or currIndex is out of bounds.
+    return -1;
+  }
+
+  if (heap->array[currIndex].value == targetValue) {
+    // Value found, return the index
+    return currIndex;
+  } else if (heap->array[currIndex].value > targetValue) {
+    // If the current node's value is greater, stop searching in this subtree.
+    return -1;
+  } else {
+    // Recursively search in the left and right subtrees
+    int leftIndex =
+        findValueIndex(heap, targetValue, getLeftChildIndex(currIndex));
+    if (leftIndex != -1) {
+      return leftIndex; // Value found in the left subtree
+    }
+
+    int rightIndex =
+        findValueIndex(heap, targetValue, getRightChildIndex(currIndex));
+    return rightIndex; // Value found in the right subtree (or -1 if not found)
+  }
+}
 
 MinHeap *destroyMinHeap(MinHeap *heap) {
   free(heap->array);

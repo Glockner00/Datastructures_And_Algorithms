@@ -118,7 +118,6 @@ int main() {
   keypad(stdscr, TRUE); // Enable special key handling
   MinHeap *heap = createMinHeap(15);
   int ch;
-  int value;
 
   do {
     printHeap(heap);
@@ -127,15 +126,19 @@ int main() {
     case 'i':
       printw("\nEnter value to insert: ");
       refresh();
+      int value;
       scanw("%d", &value);
       HeapNode newNode = {value};
       insertMinHeap(heap, newNode);
       break;
     case 'm':
-      delete_minimum(heap);
+      deleteMin(heap);
       break;
     case 'd':
-      printw("\nEnter the value to remove: ");
+      printw("\nEnter the node to remove: ");
+      int target;
+      scanw("%d", &target);
+      deleteNode(heap, target);
       break;
     case 't':
       testInsert(heap);
