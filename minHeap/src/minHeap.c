@@ -8,10 +8,11 @@
 MinHeap *reallocateMemory(MinHeap *heap) {
   int currentHeight = calculateHeapHeight(heap);
   // If the current height is not sufficient, reallocate memory
-    int newMaxSize = (pow(2, currentHeight+2) -  1); // 2^(currentHeight + 1) - 1
-    heap->array =realloc(heap->array, newMaxSize * sizeof(HeapNode));
-    heap->maxSize = newMaxSize;
-    return heap;
+  int newMaxSize = (pow(2, currentHeight + 2) -
+                    1); // 2^(currentHeight + 2) - 1 (we start at zero)
+  heap->array = realloc(heap->array, newMaxSize * sizeof(HeapNode));
+  heap->maxSize = newMaxSize;
+  return heap;
 }
 
 MinHeap *initMinHeap() {
@@ -124,7 +125,6 @@ MinHeap *deleteMin(MinHeap *heap) {
   heap = minHeapify(heap, 0);
   return heap;
 }
-
 
 MinHeap *deleteNode(MinHeap *heap, int targetValue) {
   if (heap->size == 0) {

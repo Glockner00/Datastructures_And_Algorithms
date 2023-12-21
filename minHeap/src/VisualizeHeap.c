@@ -20,10 +20,9 @@ void printHeapTree(MinHeap *heap, int index, int space) {
   }
 }
 
-void printArray(MinHeap *heap) {
-  printw("\n-----------------");
-  printw("\nHEAP INFORMATION");
-  printw("\nOrder in array: ");
+void printInfo(MinHeap *heap) {
+  printw("\n--------------HEAP INFO----------------");
+  printw("\nArray: ");
   for (int i = 0; i < heap->size; ++i) {
     printw("%d", heap->array[i].value);
     printw(" ");
@@ -99,19 +98,21 @@ void testInsert(MinHeap *heap) {
 void printHeap(MinHeap *heap) {
   clear();
   refresh();
+  printw("----------------HEAP-------------------\n");
   printHeapTree(heap, 0, 0);
-  printArray(heap);
+  printInfo(heap);
   refresh();
 
-  printw("-----------------\n");
+  printw("---------------------------------------\n");
   printw("i : insert value\n");
   printw("m : delete minimum\n");
   printw("d : delete element\n");
   printw("t : test1 insert\n");
   printw("y : test2 insert\n");
   printw("c : clear heap\n");
-  printw("q : quit\n");
-  printw("-----------------\n");
+  printw("q : quit\n"); 
+  printw("---------------------------------------");
+  printw("\nOrder in array: ");
   printw("Enter operator: ");
   refresh();
 }
