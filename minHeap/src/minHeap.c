@@ -1,23 +1,38 @@
-// minHeap.c
 #include "minHeap.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
 
-
-// TODO: what if the heap is empty?
-// TODO: Can we use the same function for decreasing the size?
+// Function to reallocate memory for the heap based on its current state
 MinHeap *reallocateMemory(MinHeap *heap) {
   int currentHeight = calculateHeapHeight(heap);
-  // If the current height is not sufficient, reallocate memory
-  int newMaxSize = (pow(2, currentHeight + 2) -
-                    1); // 2^(currentHeight + 2) - 1 (we start at zero)
-  heap->array = realloc(heap->array, newMaxSize * sizeof(HeapNode));
-  heap->maxSize = newMaxSize;
-  return heap;
+  int newLowerMax =
+      (pow(2, (currentHeight + 1)) - 1); // 2^(currentHeight + 1) - 1
+
+  // Check if the heap is empty; if so, allocate memory for one element
+  if (heap->size == 0) {
+    heap->array = realloc(heap->array, sizeof(HeapNode));
+    return heap;
+    // If maxSize is too small, double the memory for another level
+  } else if (heap->size >= heap->maxSize) {
+    int newMaxSize = (pow(2, currentHeight + 2) -
+                      1); // 2^(currentHeight + 2) - 1 (starting at zero)
+    heap->array = realloc(heap->array, newMaxSize * sizeof(HeapNode));
+    heap->maxSize = newMaxSize;
+    return heap;
+    // If too much memory is allocated, take away half (a level's worth)
+  } else if (heap->size == newLowerMax) {
+    heap->array = realloc(heap->array, newLowerMax * sizeof(HeapNode));
+    heap->maxSize = newLowerMax;
+    return heap;
+  } else {
+    // No need for changing the memory.
+    return heap;
+  }
 }
 
+// Initialize an empty min heap
 MinHeap *initMinHeap() {
   MinHeap *heap = (MinHeap *)malloc(sizeof(MinHeap));
   if (!heap) {
@@ -31,8 +46,8 @@ MinHeap *initMinHeap() {
     free(heap);
     exit(EXIT_FAILURE);
   }
-  heap->size = 0;    // initialize the size of the heap.
-  heap->maxSize = 1; // set the maxSize
+  heap->size = 0;    // Initialize the size of the heap.
+  heap->maxSize = 1; // Set the maxSize
   return heap;
 }
 
@@ -40,22 +55,22 @@ MinHeap *initMinHeap() {
  * Insertion into the minHeap.
  *
  * We are first adding the element to the bottom of the heap, we
- * later on keep performing swaps with it's parents. We keep doing this
+ * later on keep performing swaps with its parents. We keep doing this
  * until we reach a parent that is lesser than the inserted node or
  * until we reach the root node.
  *
  * Time complexity of an insertion operation: O(log(n))
- *
  */
 MinHeap *insertMinHeap(MinHeap *heap, HeapNode node) {
   if (heap->size == heap->maxSize) {
     reallocateMemory(heap);
   }
 
-  heap->array[heap->size] = node; // set the node at the end of the array.
-  int currentIndex = heap->size;  // current index is the last in the array.
+  heap->array[heap->size] = node; // Set the node at the end of the array.
+  int currentIndex = heap->size;  // Current index is the last in the array.
   heap->size++;
 
+  // Perform swaps with parents until reaching the root or a lesser parent
   while (currentIndex > 0 && heap->array[getParentIndex(currentIndex)].value >
                                  heap->array[currentIndex].value) {
     HeapNode tempNode = {heap->array[getParentIndex(currentIndex)].value};
@@ -67,40 +82,35 @@ MinHeap *insertMinHeap(MinHeap *heap, HeapNode node) {
 }
 
 /**
- * Heapify - rearrange the heap so it maintains it minHeap property.
+ * Heapify - rearrange the heap so it maintains its minHeap property.
  *
- * Checking if a nodes children are smaller than it self. If so is the
- * case we will start to swap elements upwords in the tree. We are doing
- * this recursivly until we reach the root node.
+ * Checking if a node's children are smaller than itself. If so, swap elements
+ * upwards in the tree. This is done recursively until reaching the root node.
  *
  * Time Complexity of a minHeapify operation: O(log(n))
- *
  */
-
 MinHeap *minHeapify(MinHeap *heap, int currIndex) {
-  // No swaps needed
+  // No swaps needed if the heap has one element or is empty
   if (heap->size <= 1) {
     return heap;
   }
 
   int left = getLeftChildIndex(currIndex);
   int right = getRightChildIndex(currIndex);
-  int minElementIndex = currIndex; // starting by setting the current index as
+  int minElementIndex = currIndex; // Starting by setting the current index as
                                    // the smallest element.
 
-  // if the left child is smaller than this the currentIndex, it is the
-  // smallest.
+  // If the left child is smaller than the current index, it is the smallest.
   if (left < heap->size &&
       heap->array[left].value < heap->array[currIndex].value) {
     minElementIndex = left;
   }
-  // if the right child is smaller than this, we now know that we are at the
-  // smallest element of the subtree.
+  // If the right child is smaller than the current index, it is the smallest.
   if (right < heap->size &&
       heap->array[right].value < heap->array[minElementIndex].value) {
     minElementIndex = right;
   }
-  // if the minelement's index differs from the currentIndex we start swapping.
+  // If the minElement's index differs from the currentIndex, swap elements.
   if (minElementIndex != currIndex) {
     HeapNode tempNode = heap->array[currIndex];
     heap->array[currIndex] = heap->array[minElementIndex];
@@ -111,13 +121,12 @@ MinHeap *minHeapify(MinHeap *heap, int currIndex) {
 }
 
 /**
- * Sets the last element on top and decreesas the size by one.
+ * Sets the last element on top and decreases the size by one.
  * Maintain the min heap property with a minHeapify operation.
  *
- * Time complexity of deleteMin is the same a minHeapify operartion:
+ * Time complexity of deleteMin is the same as minHeapify operation:
  * O(log(n))
  */
-
 MinHeap *deleteMin(MinHeap *heap) {
   if (heap->size == 0) {
     return heap;
@@ -125,10 +134,12 @@ MinHeap *deleteMin(MinHeap *heap) {
   HeapNode lastNode = heap->array[heap->size - 1];
   heap->array[0] = lastNode;
   heap->size--;
-  heap = minHeapify(heap, 0); 
+  heap = minHeapify(heap, 0);
+  reallocateMemory(heap);
   return heap;
 }
 
+// Delete a node with a specific target value from the heap
 MinHeap *deleteNode(MinHeap *heap, int targetValue) {
   if (heap->size == 0) {
     // Heap is empty, nothing to delete
@@ -144,10 +155,16 @@ MinHeap *deleteNode(MinHeap *heap, int targetValue) {
     heap->array[targetIndex] = heap->array[heap->size - 1];
     heap->size--;
     heap = minHeapify(heap, targetIndex);
+    reallocateMemory(heap);
   }
   return heap;
 }
 
+/* Helper function to find the index of a target value in the heap
+ * This needs to be reworked. Worst case is O(n), best case is O(1)
+ * and average case is something between because we dont usally dont
+ * need to search the whole tree to find our value.
+ * */
 int findValueIndex(MinHeap *heap, int targetValue, int currIndex) {
   if (currIndex >= heap->size) {
     // Value not found, or currIndex is out of bounds.
@@ -174,20 +191,24 @@ int findValueIndex(MinHeap *heap, int targetValue, int currIndex) {
   }
 }
 
+// Deallocate memory and destroy the heap
 MinHeap *destroyMinHeap(MinHeap *heap) {
   free(heap->array);
   free(heap);
   return heap;
 }
 
+// Helper function to get the parent index of a given index
 int getParentIndex(int i) { return (i - 1) / 2; }
 
+// Helper function to get the left child index of a given index
 int getLeftChildIndex(int i) { return (2 * i + 1); }
 
+// Helper function to get the right child index of a given index
 int getRightChildIndex(int i) { return (i * 2 + 2); }
 
 /**
- * We know that the smallest value allways will be at the root.
+ * We know that the smallest value always will be at the root.
  * Time complexity: O(1)
  */
 HeapNode getMinNode(MinHeap *heap) { return heap->array[0]; }
