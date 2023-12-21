@@ -123,6 +123,9 @@ MinHeap *deleteMin(MinHeap *heap) {
   heap->array[0] = lastNode;
   heap->size--;
   heap = minHeapify(heap, 0);
+  if((pow(2, calculateHeapHeight(heap)) - 1) <= heap->maxSize/2){
+      reallocateMemory(heap);
+  }
   return heap;
 }
 
