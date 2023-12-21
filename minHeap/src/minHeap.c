@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include <strings.h>
 
+
+// TODO: what if the heap is empty?
+// TODO: Can we use the same function for decreasing the size?
 MinHeap *reallocateMemory(MinHeap *heap) {
   int currentHeight = calculateHeapHeight(heap);
   // If the current height is not sufficient, reallocate memory
@@ -122,10 +125,7 @@ MinHeap *deleteMin(MinHeap *heap) {
   HeapNode lastNode = heap->array[heap->size - 1];
   heap->array[0] = lastNode;
   heap->size--;
-  heap = minHeapify(heap, 0);
-  if((pow(2, calculateHeapHeight(heap)) - 1) <= heap->maxSize/2){
-      reallocateMemory(heap);
-  }
+  heap = minHeapify(heap, 0); 
   return heap;
 }
 
