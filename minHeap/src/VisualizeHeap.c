@@ -27,6 +27,7 @@ void printArray(MinHeap *heap) {
     printw(" ");
   }
   printw("\n");
+  printw("Heap height: %d\n", calculateHeapHeight(heap));
 }
 
 /*  Expected output:
@@ -116,7 +117,7 @@ int main() {
   noecho();             // Don't echo keypresses
   cbreak();             // Disable line buffering
   keypad(stdscr, TRUE); // Enable special key handling
-  MinHeap *heap = createMinHeap(15);
+  MinHeap *heap = initMinHeap();
   int ch;
 
   do {
@@ -148,7 +149,7 @@ int main() {
       break;
     case 'c':
       destroyMinHeap(heap);
-      MinHeap *heap = createMinHeap(15);
+      MinHeap *heap = initMinHeap();
       break;
     }
   } while (ch != 'q');

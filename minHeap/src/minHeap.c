@@ -1,26 +1,39 @@
 // minHeap.c
 #include "minHeap.h"
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
 
-// TODO: Dynamicly set the heap size.
+void reallocateMemory(MinHeap *heap) {
+  int currentHeight = calculateHeapHeight(heap);
+  // If the current height is not sufficient, reallocate memory
+    int newMaxSize =
+        (pow(2, currentHeight+1) -  1); // 2^(currentHeight + 1) - 1
+    heap->array = realloc(heap->array, newMaxSize * sizeof(HeapNode));
+    if (!heap->array) {
+      fprintf(stderr, "Failed to reallocate memory for the heap.");
+      destroyMinHeap(heap);
+      exit(EXIT_FAILURE);
+    }
+    heap->maxSize = newMaxSize;
+}
 
-MinHeap *createMinHeap(int maxSize) {
+MinHeap *initMinHeap() {
   MinHeap *heap = (MinHeap *)malloc(sizeof(MinHeap));
   if (!heap) {
     fprintf(stderr, "Failed to allocate memory for the heap.");
     exit(EXIT_FAILURE);
   }
 
-  heap->array = (HeapNode *)malloc(maxSize * sizeof(HeapNode));
+  heap->array = (HeapNode *)malloc(sizeof(HeapNode));
   if (!heap->array) {
     fprintf(stderr, "Failed to allocate memory for the heap.");
     free(heap);
     exit(EXIT_FAILURE);
   }
-  heap->size = 0;          // initialize the size of the heap.
-  heap->maxSize = maxSize; // set the maxSize
+  heap->size = 0;    // initialize the size of the heap.
+  heap->maxSize = 1; // set the maxSize
   return heap;
 }
 
@@ -37,8 +50,7 @@ MinHeap *createMinHeap(int maxSize) {
  */
 MinHeap *insertMinHeap(MinHeap *heap, HeapNode node) {
   if (heap->size == heap->maxSize) {
-    fprintf(stderr, "Cannot insert %d, heap is full.\n", node.value);
-    return heap;
+    reallocateMemory(heap);
   }
 
   heap->array[heap->size] = node; // set the node at the end of the array.
@@ -118,10 +130,6 @@ MinHeap *deleteMin(MinHeap *heap) {
   return heap;
 }
 
-/**
- * TODO: delete any element in the heap
- *
- */
 
 MinHeap *deleteNode(MinHeap *heap, int targetValue) {
   if (heap->size == 0) {
@@ -185,3 +193,8 @@ int getRightChildIndex(int i) { return (i * 2 + 2); }
  * Time complexity: O(1)
  */
 HeapNode getMinNode(MinHeap *heap) { return heap->array[0]; }
+
+/**
+ * Returns the maximum height of the tree.
+ */
+int calculateHeapHeight(MinHeap *heap) { return (int)floor(log2(heap->size)); }

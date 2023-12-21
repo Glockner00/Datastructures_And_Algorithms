@@ -9,7 +9,7 @@ SRCS = $(wildcard $(SRC_DIR)/*.c)
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRCS))
 
 $(EXECUTABLE): $(OBJS)
-	$(CC) $(CFLAGS) $^ -o $@ -lncurses
+	$(CC) $(CFLAGS) $^ -o $@ -lncurses -lm
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -21,4 +21,5 @@ clean:
 	rm -rf $(BUILD_DIR) $(EXECUTABLE)
 
 .PHONY: clean
+
 
