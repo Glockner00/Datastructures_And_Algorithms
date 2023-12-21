@@ -21,13 +21,17 @@ void printHeapTree(MinHeap *heap, int index, int space) {
 }
 
 void printArray(MinHeap *heap) {
-  printw("\nOrder in array: \n");
+  printw("\n-----------------");
+  printw("\nHEAP INFORMATION");
+  printw("\nOrder in array: ");
   for (int i = 0; i < heap->size; ++i) {
     printw("%d", heap->array[i].value);
     printw(" ");
   }
   printw("\n");
-  printw("Heap height: %d\n", calculateHeapHeight(heap));
+  printw("Heap maximum height: %d\n", calculateHeapHeight(heap));
+  printw("Number of nodes allocated memory for: %d\n", heap->maxSize);
+  printw("Size of array: %d\n", heap->size);
 }
 
 /*  Expected output:

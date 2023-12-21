@@ -5,18 +5,13 @@
 #include <stdlib.h>
 #include <strings.h>
 
-void reallocateMemory(MinHeap *heap) {
+MinHeap *reallocateMemory(MinHeap *heap) {
   int currentHeight = calculateHeapHeight(heap);
   // If the current height is not sufficient, reallocate memory
-    int newMaxSize =
-        (pow(2, currentHeight+1) -  1); // 2^(currentHeight + 1) - 1
-    heap->array = realloc(heap->array, newMaxSize * sizeof(HeapNode));
-    if (!heap->array) {
-      fprintf(stderr, "Failed to reallocate memory for the heap.");
-      destroyMinHeap(heap);
-      exit(EXIT_FAILURE);
-    }
+    int newMaxSize = (pow(2, currentHeight+2) -  1); // 2^(currentHeight + 1) - 1
+    heap->array =realloc(heap->array, newMaxSize * sizeof(HeapNode));
     heap->maxSize = newMaxSize;
+    return heap;
 }
 
 MinHeap *initMinHeap() {

@@ -25,5 +25,5 @@ int getLeftChildIndex(int i);
 int getRightChildIndex(int i);
 HeapNode getMinNode(MinHeap *heap);
 int calculateHeapHeight(MinHeap *heap);
-void reallocateMemory(MinHeap *heap);
+MinHeap *reallocateMemory(MinHeap *heap);
 #endif
