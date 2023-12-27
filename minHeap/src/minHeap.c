@@ -216,4 +216,10 @@ HeapNode getMinNode(MinHeap *heap) { return heap->array[0]; }
 /**
  * Returns the maximum height of the tree.
  */
-int calculateHeapHeight(MinHeap *heap) { return (int)floor(log2(heap->size)); }
+int calculateHeapHeight(MinHeap *heap) {
+  if (heap->size != 0) { 
+      return (int)floor(log2(heap->size));
+  }else{
+      return -1;
+  }
+}
