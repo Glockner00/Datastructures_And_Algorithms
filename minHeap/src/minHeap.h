@@ -19,11 +19,11 @@ MinHeap *destroyMinHeap(MinHeap *heap);
 MinHeap *heapify(MinHeap *heap, int index);
 MinHeap *deleteMin(MinHeap *heap);
 MinHeap *deleteNode(MinHeap *heap, int targetValue);
+MinHeap *reallocateMemory(MinHeap *heap);
+HeapNode getMinNode(MinHeap *heap);
 int findValueIndex(MinHeap *heap, int targetValue, int currIndex);
 int getParentIndex(int i);
 int getLeftChildIndex(int i);
 int getRightChildIndex(int i);
-HeapNode getMinNode(MinHeap *heap);
 int calculateHeapHeight(MinHeap *heap);
-MinHeap *reallocateMemory(MinHeap *heap);
 #endif
